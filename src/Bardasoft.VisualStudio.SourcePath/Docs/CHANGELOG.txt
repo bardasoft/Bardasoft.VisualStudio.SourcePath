@@ -1,0 +1,18 @@
+Version 1.3.0
+- Updated project naming to Bardasoft.VisualStudio.SourcePath.
+- Fixed VSIX manifest Description metadata.
+- Added Marketplace publication files.
+- Added Marketplace overview, images, checklist and publish scripts.
+- Updated README and documentation paths to the new project name.
+
+Version 1.2.1
+- Reduced the VSIX manifest Description to stay under the 1000-character schema limit.
+- Kept the complete project information in Docs\README.txt and README.md.
+- Added documentation explaining where to edit the presentation text in the future.
+
+Version 1.2.0
+- Changed the visible extension title to Bardasoft SourcePath.
+- Replaced the small icon with a sharper and cleaner design.
+- Replaced the large preview image with a sharper and cleaner design.
+- Expanded the VSIX presentation text with the main project information.
+- Added explicit documentation explaining where each visible piece of metadata must be edited in the future.

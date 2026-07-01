@@ -1,9 +1,13 @@
 #nullable enable
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -232,9 +236,13 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
             BorderThickness = new Thickness(0),
             Background = Brushes.Transparent,
             Content = icon,
-            Focusable = false,
+            Focusable = true,
+            IsTabStop = true,
             ToolTip = toolTip
         };
+
+        AutomationProperties.SetName(button, toolTip);
+        AutomationProperties.SetHelpText(button, toolTip);
 
         button.Click += clickHandler;
 
@@ -480,7 +488,7 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
 
         if (!string.IsNullOrWhiteSpace(filePath))
         {
-            Clipboard.SetText(filePath);
+            TrySetClipboardText(filePath);
         }
     }
 
@@ -497,7 +505,7 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
 
         if (!string.IsNullOrWhiteSpace(fileName))
         {
-            Clipboard.SetText(fileName);
+            TrySetClipboardText(fileName);
         }
     }
 
@@ -514,8 +522,40 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
 
         if (!string.IsNullOrWhiteSpace(folderPath))
         {
-            Clipboard.SetText(folderPath);
+            TrySetClipboardText(folderPath);
         }
+    }
+
+    private static bool TrySetClipboardText(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return false;
+        }
+
+        try
+        {
+            Clipboard.SetText(text);
+            return true;
+        }
+        catch (COMException ex)
+        {
+            Debug.WriteLine("SourcePath could not copy to clipboard: " + ex.Message);
+        }
+        catch (ExternalException ex)
+        {
+            Debug.WriteLine("SourcePath could not copy to clipboard: " + ex.Message);
+        }
+        catch (ThreadStateException ex)
+        {
+            Debug.WriteLine("SourcePath could not copy to clipboard: " + ex.Message);
+        }
+        catch (InvalidOperationException ex)
+        {
+            Debug.WriteLine("SourcePath could not copy to clipboard: " + ex.Message);
+        }
+
+        return false;
     }
 
     private void OpenContainingFolder()
@@ -567,7 +607,26 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
             UseShellExecute = true
         };
 
-        Process.Start(startInfo);
+        try
+        {
+            Process.Start(startInfo);
+        }
+        catch (Win32Exception ex)
+        {
+            Debug.WriteLine("SourcePath could not open Explorer: " + ex.Message);
+        }
+        catch (FileNotFoundException ex)
+        {
+            Debug.WriteLine("SourcePath could not open Explorer: " + ex.Message);
+        }
+        catch (ObjectDisposedException ex)
+        {
+            Debug.WriteLine("SourcePath could not open Explorer: " + ex.Message);
+        }
+        catch (InvalidOperationException ex)
+        {
+            Debug.WriteLine("SourcePath could not open Explorer: " + ex.Message);
+        }
     }
 
     private static class IconGeometry

@@ -60,4 +60,30 @@ public sealed class SourcePathPathFormatterTests
 
         Assert.AreEqual(filePath, result);
     }
+
+    [TestMethod]
+    public void Format_WhenFilePathIsEmpty_ReturnsEmptyString()
+    {
+        string result = SourcePathPathFormatter.Format(
+            " ",
+            SourcePathDisplayMode.FullPath,
+            Path.Combine("E:\\", "Work"));
+
+        Assert.AreEqual(string.Empty, result);
+    }
+
+    [TestMethod]
+    public void Format_WhenSolutionDirectoryHasTrailingSeparator_ReturnsRelativePath()
+    {
+        string solutionDirectory = Path.Combine("E:\\", "Work", "App") + Path.DirectorySeparatorChar;
+        string filePath = Path.Combine(solutionDirectory, "Controllers", "HomeController.cs");
+        string expected = Path.Combine("Controllers", "HomeController.cs");
+
+        string result = SourcePathPathFormatter.Format(
+            filePath,
+            SourcePathDisplayMode.RelativeToSolution,
+            solutionDirectory);
+
+        Assert.AreEqual(expected, result);
+    }
 }

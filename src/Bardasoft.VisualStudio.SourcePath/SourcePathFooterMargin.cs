@@ -6,14 +6,20 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
+using IoPath = System.IO.Path;
+using WpfPath = System.Windows.Shapes.Path;
 
 namespace Bardasoft.VisualStudio.SourcePath;
 
 /// <summary>
-/// Margen inferior que muestra la ruta física completa del archivo abierto en el editor.
+/// Margen inferior que muestra la ruta fisica del archivo abierto en el editor.
 /// </summary>
 internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
 {
@@ -23,22 +29,25 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
 
     private readonly IWpfTextView _textView;
     private readonly ITextDocumentFactoryService _textDocumentFactoryService;
-    private readonly TextBlock _textBlock;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly Grid _layout;
+    private readonly TextBox _pathTextBox;
+    private readonly StackPanel _buttonPanel;
 
     private ITextDocument? _textDocument;
     private bool _isDisposed;
+    private SourcePathOptionsSnapshot _options = SourcePathOptionsState.Current;
 
     public SourcePathFooterMargin(
         IWpfTextView textView,
-        ITextDocumentFactoryService textDocumentFactoryService)
+        ITextDocumentFactoryService textDocumentFactoryService,
+        IServiceProvider serviceProvider)
     {
         _textView = textView ?? throw new ArgumentNullException(nameof(textView));
         _textDocumentFactoryService = textDocumentFactoryService
             ?? throw new ArgumentNullException(nameof(textDocumentFactoryService));
+        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
 
-        Height = 24;
-        MinHeight = 24;
-        Padding = new Thickness(8, 2, 8, 2);
         SnapsToDevicePixels = true;
         ClipToBounds = true;
 
@@ -46,22 +55,36 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
             BackgroundProperty,
             EnvironmentColors.ToolWindowBackgroundBrushKey);
 
-        _textBlock = new TextBlock
+        _layout = new Grid
         {
-            VerticalAlignment = VerticalAlignment.Center,
-            TextTrimming = TextTrimming.CharacterEllipsis,
-            TextWrapping = TextWrapping.NoWrap,
-            FontSize = 11
+            SnapsToDevicePixels = true
         };
 
-        _textBlock.SetResourceReference(
-            TextBlock.ForegroundProperty,
-            EnvironmentColors.ToolWindowTextBrushKey);
+        _layout.ColumnDefinitions.Add(new ColumnDefinition
+        {
+            Width = new GridLength(1, GridUnitType.Star)
+        });
+        _layout.ColumnDefinitions.Add(new ColumnDefinition
+        {
+            Width = GridLength.Auto
+        });
 
-        Child = _textBlock;
+        _pathTextBox = CreatePathTextBox();
+        _buttonPanel = CreateButtonPanel();
+
+        Grid.SetColumn(_pathTextBox, 0);
+        Grid.SetColumn(_buttonPanel, 1);
+        _layout.Children.Add(_pathTextBox);
+        _layout.Children.Add(_buttonPanel);
+
+        Child = _layout;
         ContextMenu = CreateContextMenu();
 
+        AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(OnFooterMouseLeftButtonUp), true);
+        SourcePathOptionsState.Changed += OnOptionsChanged;
+
         TryAttachTextDocument();
+        ApplyOptions();
         UpdateDisplayedPath();
 
         _textView.Closed += OnTextViewClosed;
@@ -93,17 +116,140 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
         _isDisposed = true;
 
         _textView.Closed -= OnTextViewClosed;
+        SourcePathOptionsState.Changed -= OnOptionsChanged;
+        RemoveHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(OnFooterMouseLeftButtonUp));
         DetachTextDocument();
 
         ContextMenu = null;
         Child = null;
     }
 
-    protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
+    private TextBox CreatePathTextBox()
     {
-        base.OnMouseLeftButtonUp(e);
+        var textBox = new TextBox
+        {
+            IsReadOnly = true,
+            IsReadOnlyCaretVisible = false,
+            BorderThickness = new Thickness(0),
+            Background = Brushes.Transparent,
+            CaretBrush = Brushes.Transparent,
+            FocusVisualStyle = null,
+            VerticalAlignment = VerticalAlignment.Center,
+            VerticalContentAlignment = VerticalAlignment.Center,
+            TextWrapping = TextWrapping.NoWrap,
+            HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
+            VerticalScrollBarVisibility = ScrollBarVisibility.Disabled,
+            MinWidth = 0,
+            Padding = new Thickness(0),
+            IsTabStop = false
+        };
 
-        if (_isDisposed)
+        textBox.Template = CreateFlatTextBoxTemplate();
+
+        textBox.SetResourceReference(
+            Control.ForegroundProperty,
+            EnvironmentColors.ToolWindowTextBrushKey);
+
+        textBox.ContextMenu = CreateContextMenu();
+
+        return textBox;
+    }
+
+    private static ControlTemplate CreateFlatTextBoxTemplate()
+    {
+        var contentHost = new FrameworkElementFactory(typeof(ScrollViewer));
+        contentHost.Name = "PART_ContentHost";
+        contentHost.SetValue(ScrollViewer.HorizontalScrollBarVisibilityProperty, ScrollBarVisibility.Hidden);
+        contentHost.SetValue(ScrollViewer.VerticalScrollBarVisibilityProperty, ScrollBarVisibility.Disabled);
+        contentHost.SetValue(ScrollViewer.BackgroundProperty, Brushes.Transparent);
+
+        return new ControlTemplate(typeof(TextBox))
+        {
+            VisualTree = contentHost
+        };
+    }
+
+    private StackPanel CreateButtonPanel()
+    {
+        var panel = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            VerticalAlignment = VerticalAlignment.Center
+        };
+
+        panel.Children.Add(CreateIconButton(
+            "Copiar ruta completa",
+            IconGeometry.Copy,
+            (_, _) => CopyFullPath()));
+
+        panel.Children.Add(CreateIconButton(
+            "Copiar nombre del archivo",
+            IconGeometry.File,
+            (_, _) => CopyFileName()));
+
+        panel.Children.Add(CreateIconButton(
+            "Copiar carpeta",
+            IconGeometry.Folder,
+            (_, _) => CopyFolderPath()));
+
+        panel.Children.Add(CreateIconButton(
+            "Abrir ubicacion en el Explorador",
+            IconGeometry.OpenFolder,
+            (_, _) => OpenContainingFolder()));
+
+        return panel;
+    }
+
+    private static Button CreateIconButton(
+        string toolTip,
+        Geometry iconGeometry,
+        RoutedEventHandler clickHandler)
+    {
+        var icon = new WpfPath
+        {
+            Data = iconGeometry,
+            Width = 13,
+            Height = 13,
+            Stretch = Stretch.Uniform,
+            StrokeThickness = 1.35,
+            StrokeStartLineCap = PenLineCap.Round,
+            StrokeEndLineCap = PenLineCap.Round,
+            StrokeLineJoin = PenLineJoin.Round,
+            Fill = Brushes.Transparent,
+            SnapsToDevicePixels = true
+        };
+
+        icon.SetResourceReference(
+            Shape.StrokeProperty,
+            EnvironmentColors.ToolWindowTextBrushKey);
+
+        var button = new Button
+        {
+            Width = 22,
+            Height = 20,
+            Padding = new Thickness(0),
+            Margin = new Thickness(2, 0, 0, 0),
+            BorderThickness = new Thickness(0),
+            Background = Brushes.Transparent,
+            Content = icon,
+            Focusable = false,
+            ToolTip = toolTip
+        };
+
+        button.Click += clickHandler;
+
+        return button;
+    }
+
+    private void OnFooterMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (_isDisposed || !_options.EnableCtrlClickOpen)
+        {
+            return;
+        }
+
+        if (e.OriginalSource is DependencyObject source &&
+            IsInsideButton(source))
         {
             return;
         }
@@ -126,6 +272,23 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
         e.Handled = true;
     }
 
+    private static bool IsInsideButton(DependencyObject source)
+    {
+        DependencyObject? current = source;
+
+        while (current is not null)
+        {
+            if (current is Button)
+            {
+                return true;
+            }
+
+            current = VisualTreeHelper.GetParent(current);
+        }
+
+        return false;
+    }
+
     private void OnTextViewClosed(object sender, EventArgs e)
     {
         Dispose();
@@ -135,6 +298,18 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
         object sender,
         TextDocumentFileActionEventArgs e)
     {
+        UpdateDisplayedPath();
+    }
+
+    private void OnOptionsChanged(object? sender, EventArgs e)
+    {
+        if (_isDisposed)
+        {
+            return;
+        }
+
+        _options = SourcePathOptionsState.Current;
+        ApplyOptions();
         UpdateDisplayedPath();
     }
 
@@ -162,6 +337,20 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
         }
     }
 
+    private void ApplyOptions()
+    {
+        Height = _options.FooterHeight;
+        MinHeight = _options.FooterHeight;
+        Padding = new Thickness(_options.HorizontalPadding, 2, _options.HorizontalPadding, 2);
+        Visibility = _options.IsFooterVisible ? Visibility.Visible : Visibility.Collapsed;
+
+        _pathTextBox.FontFamily = new FontFamily(_options.FontFamily);
+        _pathTextBox.FontSize = _options.FontSize;
+        _buttonPanel.Visibility = _options.ShowActionButtons
+            ? Visibility.Visible
+            : Visibility.Collapsed;
+    }
+
     private void UpdateDisplayedPath()
     {
         if (_isDisposed)
@@ -173,13 +362,44 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
 
         if (string.IsNullOrWhiteSpace(filePath))
         {
-            _textBlock.Text = NoPhysicalPathText;
-            _textBlock.ToolTip = NoPhysicalPathText;
+            _pathTextBox.Text = NoPhysicalPathText;
+            _pathTextBox.ToolTip = NoPhysicalPathText;
             return;
         }
 
-        _textBlock.Text = filePath;
-        _textBlock.ToolTip = filePath;
+        string displayPath = SourcePathPathFormatter.Format(
+            filePath!,
+            _options.DisplayMode,
+            GetSolutionDirectory());
+        _pathTextBox.Text = displayPath;
+        _pathTextBox.ToolTip = filePath;
+    }
+
+    private string? GetSolutionDirectory()
+    {
+        if (!ThreadHelper.CheckAccess())
+        {
+            return null;
+        }
+
+        ThreadHelper.ThrowIfNotOnUIThread();
+
+        if (_serviceProvider.GetService(typeof(SVsSolution)) is not IVsSolution solution)
+        {
+            return null;
+        }
+
+        int result = solution.GetSolutionInfo(
+            out string solutionDirectory,
+            out _,
+            out _);
+
+        if (result < 0 || string.IsNullOrWhiteSpace(solutionDirectory))
+        {
+            return null;
+        }
+
+        return solutionDirectory;
     }
 
     private string? GetCurrentFilePath()
@@ -234,7 +454,7 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
         contextMenu.Items.Add(new Separator());
 
         contextMenu.Items.Add(CreateMenuItem(
-            "Abrir ubicación en el Explorador",
+            "Abrir ubicacion en el Explorador",
             (_, _) => OpenContainingFolder()));
 
         return contextMenu;
@@ -273,7 +493,7 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
             return;
         }
 
-        string fileName = Path.GetFileName(filePath);
+        string fileName = IoPath.GetFileName(filePath);
 
         if (!string.IsNullOrWhiteSpace(fileName))
         {
@@ -290,7 +510,7 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
             return;
         }
 
-        string? folderPath = Path.GetDirectoryName(filePath);
+        string? folderPath = IoPath.GetDirectoryName(filePath);
 
         if (!string.IsNullOrWhiteSpace(folderPath))
         {
@@ -327,7 +547,7 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
         }
         else
         {
-            string? folderPath = Path.GetDirectoryName(filePath);
+            string? folderPath = IoPath.GetDirectoryName(filePath);
 
             if (!string.IsNullOrWhiteSpace(folderPath) && Directory.Exists(folderPath))
             {
@@ -348,5 +568,20 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
         };
 
         Process.Start(startInfo);
+    }
+
+    private static class IconGeometry
+    {
+        public static Geometry Copy { get; } = Geometry.Parse(
+            "M5,1.5 H12.5 V9 H10.5 M3,4 H10 V13 H3 Z");
+
+        public static Geometry File { get; } = Geometry.Parse(
+            "M4,1.5 H9 L12,4.5 V13 H4 Z M9,1.5 V4.5 H12");
+
+        public static Geometry Folder { get; } = Geometry.Parse(
+            "M2,4.5 H5.5 L7,6 H14 V12.5 H2 Z");
+
+        public static Geometry OpenFolder { get; } = Geometry.Parse(
+            "M2,5 H5.5 L7,6.5 H14 M2,5 V13 H12.5 L14,7 H4 L2,13 M8.5,8.5 H11.5 M11.5,8.5 V11.5");
     }
 }

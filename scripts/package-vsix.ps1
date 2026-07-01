@@ -11,6 +11,7 @@ $ProjectDir = Join-Path $SolutionRoot "src\$ProjectName"
 $OutputDir = Join-Path $ProjectDir "bin\$Configuration"
 $DllPath = Join-Path $OutputDir "$ProjectName.dll"
 $PdbPath = Join-Path $OutputDir "$ProjectName.pdb"
+$PkgDefPath = Join-Path $OutputDir "$ProjectName.pkgdef"
 $SourceManifestPath = Join-Path $ProjectDir "source.extension.vsixmanifest"
 $VsixPath = Join-Path $OutputDir "$ProjectName.vsix"
 $StagingDir = Join-Path $ProjectDir "obj\vsix\$Configuration\manual"
@@ -30,6 +31,12 @@ if (Test-Path $StagingDir) {
 New-Item -ItemType Directory -Path $StagingDir | Out-Null
 
 Copy-Item $DllPath -Destination (Join-Path $StagingDir "$ProjectName.dll") -Force
+
+if (-not (Test-Path $PkgDefPath)) {
+    throw "No existe el pkgdef generado: $PkgDefPath"
+}
+
+Copy-Item $PkgDefPath -Destination (Join-Path $StagingDir "$ProjectName.pkgdef") -Force
 
 if (Test-Path $PdbPath) {
     Copy-Item $PdbPath -Destination (Join-Path $StagingDir "$ProjectName.pdb") -Force
@@ -83,6 +90,23 @@ $asset.SetAttribute("Path", "$ProjectName.dll")
 $asset.RemoveAttribute("Source", "http://schemas.microsoft.com/developer/vsx-schema-design/2011")
 $asset.RemoveAttribute("ProjectName", "http://schemas.microsoft.com/developer/vsx-schema-design/2011")
 
+$vsPackageAsset = $manifest.SelectSingleNode("//vsx:Assets/vsx:Asset[@Type='Microsoft.VisualStudio.VsPackage']", $ns)
+if ($null -eq $vsPackageAsset) {
+    $assets = $manifest.SelectSingleNode("//vsx:Assets", $ns)
+    if ($null -eq $assets) {
+        $assets = $manifest.CreateElement("Assets", "http://schemas.microsoft.com/developer/vsx-schema/2011")
+        $manifest.PackageManifest.AppendChild($assets) | Out-Null
+    }
+
+    $vsPackageAsset = $manifest.CreateElement("Asset", "http://schemas.microsoft.com/developer/vsx-schema/2011")
+    $vsPackageAsset.SetAttribute("Type", "Microsoft.VisualStudio.VsPackage")
+    $assets.AppendChild($vsPackageAsset) | Out-Null
+}
+
+$vsPackageAsset.SetAttribute("Path", "$ProjectName.pkgdef")
+$vsPackageAsset.RemoveAttribute("Source", "http://schemas.microsoft.com/developer/vsx-schema-design/2011")
+$vsPackageAsset.RemoveAttribute("ProjectName", "http://schemas.microsoft.com/developer/vsx-schema-design/2011")
+
 $prerequisites = $manifest.SelectSingleNode("//vsx:Prerequisites", $ns)
 if ($null -eq $prerequisites) {
     $prerequisites = $manifest.CreateElement("Prerequisites", "http://schemas.microsoft.com/developer/vsx-schema/2011")
@@ -117,18 +141,23 @@ finally {
 }
 
 $contentTypesPath = Join-Path $StagingDir "[Content_Types].xml"
-@'
+$contentTypesXml = @'
 <?xml version="1.0" encoding="utf-8"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
   <Default Extension="dll" ContentType="application/octet-stream" />
   <Default Extension="pdb" ContentType="application/octet-stream" />
+  <Default Extension="pkgdef" ContentType="text/plain" />
   <Default Extension="vsixmanifest" ContentType="text/xml" />
   <Default Extension="png" ContentType="image/png" />
   <Default Extension="md" ContentType="text/markdown" />
   <Default Extension="txt" ContentType="text/plain" />
   <Default Extension="svg" ContentType="image/svg+xml" />
 </Types>
-'@ | Set-Content -Path $contentTypesPath -Encoding UTF8
+'@
+[System.IO.File]::WriteAllText(
+    $contentTypesPath,
+    $contentTypesXml,
+    (New-Object System.Text.UTF8Encoding($false)))
 
 if (Test-Path $VsixPath) {
     Remove-Item $VsixPath -Force

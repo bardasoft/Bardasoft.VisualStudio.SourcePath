@@ -2,6 +2,7 @@
 
 using System;
 using System.ComponentModel.Composition;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
@@ -21,6 +22,9 @@ internal sealed class SourcePathFooterMarginProvider : IWpfTextViewMarginProvide
 {
     [Import]
     internal ITextDocumentFactoryService TextDocumentFactoryService { get; set; } = null!;
+
+    [Import(typeof(SVsServiceProvider))]
+    internal IServiceProvider ServiceProvider { get; set; } = null!;
 
     public IWpfTextViewMargin CreateMargin(
         IWpfTextViewHost wpfTextViewHost,
@@ -44,8 +48,15 @@ internal sealed class SourcePathFooterMarginProvider : IWpfTextViewMarginProvide
                 "No se pudo importar ITextDocumentFactoryService desde MEF.");
         }
 
+        if (ServiceProvider is null)
+        {
+            throw new InvalidOperationException(
+                "No se pudo importar SVsServiceProvider desde MEF.");
+        }
+
         return new SourcePathFooterMargin(
             wpfTextViewHost.TextView,
-            TextDocumentFactoryService);
+            TextDocumentFactoryService,
+            ServiceProvider);
     }
 }

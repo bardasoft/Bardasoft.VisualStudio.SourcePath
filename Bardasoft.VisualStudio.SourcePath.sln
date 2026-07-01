@@ -1,8 +1,15 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.0.0.0
 MinimumVisualStudioVersion = 17.0.31903.59
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bardasoft.VisualStudio.SourcePath", "src\Bardasoft.VisualStudio.SourcePath\Bardasoft.VisualStudio.SourcePath.csproj", "{92C8567E-01EC-4797-8AD2-B03E35625376}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bardasoft.VisualStudio.SourcePath.Tests", "tests\Bardasoft.VisualStudio.SourcePath.Tests\Bardasoft.VisualStudio.SourcePath.Tests.csproj", "{C618B34C-2585-4911-BB28-1BE1539963B3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,9 +33,25 @@ Global
 		{92C8567E-01EC-4797-8AD2-B03E35625376}.Release|arm64.Build.0 = Release|arm64
 		{92C8567E-01EC-4797-8AD2-B03E35625376}.Release|x86.ActiveCfg = Release|x86
 		{92C8567E-01EC-4797-8AD2-B03E35625376}.Release|x86.Build.0 = Release|x86
+		{C618B34C-2585-4911-BB28-1BE1539963B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C618B34C-2585-4911-BB28-1BE1539963B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C618B34C-2585-4911-BB28-1BE1539963B3}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{C618B34C-2585-4911-BB28-1BE1539963B3}.Debug|arm64.Build.0 = Debug|Any CPU
+		{C618B34C-2585-4911-BB28-1BE1539963B3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C618B34C-2585-4911-BB28-1BE1539963B3}.Debug|x86.Build.0 = Debug|Any CPU
+		{C618B34C-2585-4911-BB28-1BE1539963B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C618B34C-2585-4911-BB28-1BE1539963B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C618B34C-2585-4911-BB28-1BE1539963B3}.Release|arm64.ActiveCfg = Release|Any CPU
+		{C618B34C-2585-4911-BB28-1BE1539963B3}.Release|arm64.Build.0 = Release|Any CPU
+		{C618B34C-2585-4911-BB28-1BE1539963B3}.Release|x86.ActiveCfg = Release|Any CPU
+		{C618B34C-2585-4911-BB28-1BE1539963B3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C618B34C-2585-4911-BB28-1BE1539963B3} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{92C8567E-01EC-4797-8AD2-B03E35625376} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FCCA4AA6-D7FB-4BA5-A6C0-C96C31738DE5}

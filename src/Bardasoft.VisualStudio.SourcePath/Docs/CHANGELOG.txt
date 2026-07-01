@@ -1,3 +1,11 @@
+Version 2.1.0
+- Added the Bardasoft SourcePath options page.
+- Added display modes for full path, file name and solution-relative path.
+- Added configurable font family, font size, footer height, opacity and text selection.
+- Added footer action buttons for copy path, copy file name, copy folder and open location.
+- Added focused tests for path formatting behavior.
+- Updated VSIX packaging to include the generated pkgdef asset.
+
 Version 1.3.0
 - Updated project naming to Bardasoft.VisualStudio.SourcePath.
 - Fixed VSIX manifest Description metadata.

@@ -17,7 +17,7 @@
     <Nullable>enable</Nullable>
     <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">17.0</VisualStudioVersion>
-    <GeneratePkgDefFile>false</GeneratePkgDefFile>
+    <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <UseCodebase>true</UseCodebase>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
@@ -92,10 +92,30 @@
       <HintPath>$(NuGetPackageRoot)microsoft.visualstudio.shell.framework\17.14.40264\lib\net472\Microsoft.VisualStudio.Shell.Framework.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop">
+      <HintPath>$(NuGetPackageRoot)microsoft.visualstudio.shell.interop\17.14.40260\lib\net472\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Interop">
+      <HintPath>$(NuGetPackageRoot)microsoft.visualstudio.interop\17.14.40260\lib\net472\Microsoft.VisualStudio.Interop.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Threading">
+      <HintPath>$(NuGetPackageRoot)microsoft.visualstudio.threading.only\17.14.15\lib\net472\Microsoft.VisualStudio.Threading.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SourcePathDisplayMode.cs" />
     <Compile Include="SourcePathFooterMarginProvider.cs" />
     <Compile Include="SourcePathFooterMargin.cs" />
+    <Compile Include="SourcePathOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SourcePathOptionsSnapshot.cs" />
+    <Compile Include="SourcePathOptionsState.cs" />
+    <Compile Include="SourcePathPackage.cs" />
+    <Compile Include="SourcePathPathFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -104,7 +124,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-
     <Content Include="Docs\README.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -139,6 +158,9 @@
     <PackageReference Include="Microsoft.VisualStudio.CoreUtility" Version="17.14.275" PrivateAssets="all" />
     <PackageReference Include="Microsoft.VisualStudio.Shell.15.0" Version="17.14.40264" PrivateAssets="all" />
     <PackageReference Include="Microsoft.VisualStudio.Shell.Framework" Version="17.14.40264" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.VisualStudio.Interop" Version="17.14.40260" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop" Version="17.14.40260" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading" Version="17.14.15" PrivateAssets="all" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="18.5.40034" PrivateAssets="all" />
   </ItemGroup>
   <PropertyGroup>
@@ -151,6 +173,9 @@
     <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.utilities\17.14.40264\lib\net472\Microsoft.VisualStudio.Utilities.dll')" Text="No se encontro Microsoft.VisualStudio.Utilities.dll. Ejecuta Restore o elimina bin/obj y vuelve a compilar." />
     <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.shell.15.0\17.14.40264\lib\net472\Microsoft.VisualStudio.Shell.15.0.dll')" Text="No se encontro Microsoft.VisualStudio.Shell.15.0.dll. Ejecuta Restore o elimina bin/obj y vuelve a compilar." />
     <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.shell.framework\17.14.40264\lib\net472\Microsoft.VisualStudio.Shell.Framework.dll')" Text="No se encontro Microsoft.VisualStudio.Shell.Framework.dll. Ejecuta Restore o elimina bin/obj y vuelve a compilar." />
+    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.shell.interop\17.14.40260\lib\net472\Microsoft.VisualStudio.Shell.Interop.dll')" Text="No se encontro Microsoft.VisualStudio.Shell.Interop.dll. Ejecuta Restore o verifica la version del paquete." />
+    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.interop\17.14.40260\lib\net472\Microsoft.VisualStudio.Interop.dll')" Text="No se encontro Microsoft.VisualStudio.Interop.dll. Ejecuta Restore o verifica la version del paquete." />
+    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.threading.only\17.14.15\lib\net472\Microsoft.VisualStudio.Threading.dll')" Text="No se encontro Microsoft.VisualStudio.Threading.dll. Ejecuta Restore o verifica la version del paquete." />
   </Target>
   <Target Name="EnsureVSSDKBuildToolsTargets" BeforeTargets="PrepareForBuild">
     <Error Condition="!Exists('$(VSSDKBuildToolsTargets)')" Text="No se encontraron los targets de Microsoft.VSSDK.BuildTools en: $(VSSDKBuildToolsTargets). Ejecuta Restore o verifica la version del paquete." />

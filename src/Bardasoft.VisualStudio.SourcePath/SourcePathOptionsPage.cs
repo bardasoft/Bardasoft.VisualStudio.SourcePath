@@ -9,7 +9,7 @@ public sealed class SourcePathOptionsPage : DialogPage
 {
     [Category("Apariencia")]
     [DisplayName("Mostrar footer")]
-    [Description("Muestra u oculta el footer de Bardasoft SourcePath en el editor.")]
+    [Description("Muestra u oculta el footer de SourcePath en el editor.")]
     [DefaultValue(true)]
     public bool IsFooterVisible { get; set; } = true;
 

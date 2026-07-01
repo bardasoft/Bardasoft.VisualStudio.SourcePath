@@ -1,5 +1,5 @@
 Version 2.1.0
-- Added the Bardasoft SourcePath options page.
+- Added the SourcePath options page.
 - Added display modes for full path, file name and solution-relative path.
 - Added configurable font family, font size, footer height, opacity and text selection.
 - Added footer action buttons for copy path, copy file name, copy folder and open location.

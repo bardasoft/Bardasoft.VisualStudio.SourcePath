@@ -1,8 +1,8 @@
-# AGENTS.md - Bardasoft SourcePath
+# AGENTS.md - SourcePath
 
 ## Proyecto
 
-Este repositorio contiene **Bardasoft SourcePath**, una extension VSIX gratuita y open-source para **Visual Studio 2022**.
+Este repositorio contiene **SourcePath**, una extension VSIX gratuita y open-source para **Visual Studio 2022**.
 
 La extension agrega un margen inferior discreto dentro del editor de Visual Studio y muestra la ruta fisica completa del archivo activo. Tambien permite:
 
@@ -219,7 +219,7 @@ namespace Bardasoft.VisualStudio.SourcePath;
 - No cambiar IDs, publisher o nombre del paquete sin indicacion explicita:
   - Identity Id: `Bardasoft.VisualStudio.SourcePath`
   - Publisher: `bardasoft`
-  - DisplayName: `Bardasoft SourcePath`
+  - DisplayName: `SourcePath`
 - Mantener `Assets/Microsoft.VisualStudio.MefComponent` apuntando correctamente al proyecto o al DLL empaquetado.
 - Si se cambian recursos visuales, sincronizar:
   - `src\Bardasoft.VisualStudio.SourcePath\Resources\`

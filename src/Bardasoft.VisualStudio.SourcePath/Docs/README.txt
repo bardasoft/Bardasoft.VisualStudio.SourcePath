@@ -1,6 +1,6 @@
-BARDASOFT SOURCEPATH
+SOURCEPATH
 
-Bardasoft SourcePath is a free and open-source Visual Studio extension.
+SourcePath is a free and open-source Visual Studio extension.
 
 WHAT IT DOES
 - Shows the full source file path of the active document.

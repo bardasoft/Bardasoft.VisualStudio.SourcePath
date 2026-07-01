@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Extensión muestra la ruta completa del archivo abierto en el margen inferior del editor de Visual Studio.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Carlos Bardales (Bardasoft)")]
-[assembly: AssemblyProduct("Bardasoft Visual Studio Source Path")]
+[assembly: AssemblyProduct("SourcePath for Visual Studio")]
 [assembly: AssemblyCopyright("Copyright © Bardasoft")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

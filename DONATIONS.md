@@ -1,10 +1,10 @@
 # Donations / Donaciones
 
 This project is free and open source.
-If **Bardasoft SourcePath** is useful to you, you can support its development with an optional donation.
+If **SourcePath** is useful to you, you can support its development with an optional donation.
 
 Este proyecto es gratuito y de código abierto.  
-Si **Bardasoft SourcePath** te resulta útil, puedes apoyar su desarrollo con una donación voluntaria.  
+Si **SourcePath** te resulta útil, puedes apoyar su desarrollo con una donación voluntaria.
 
 <p align="center">
   <a href="https://www.paypal.com/donate/?hosted_button_id=EM5DZL2RPA8SL" target="_blank">
@@ -13,4 +13,3 @@ Si **Bardasoft SourcePath** te resulta útil, puedes apoyar su desarrollo con un
          title="Donate with PayPal" />
   </a>
 </p>
-

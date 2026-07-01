@@ -1,7 +1,7 @@
-# Bardasoft SourcePath
+# SourcePath
 
 <p align="center">
-  <img src="src/Bardasoft.VisualStudio.SourcePath/Resources/Icon128.png" alt="Bardasoft SourcePath Logo" width="128" height="128" />
+  <img src="src/Bardasoft.VisualStudio.SourcePath/Resources/Icon128.png" alt="SourcePath Logo" width="128" height="128" />
 </p>
 
 <p align="center">
@@ -22,7 +22,7 @@
 
 ### English
 
-**Bardasoft SourcePath** helps you quickly identify the exact file you are editing in Visual Studio.
+**SourcePath** helps you quickly identify the exact file you are editing in Visual Studio.
 
 It is especially useful when working with large solutions, multiple projects, deep folder structures, generated files, or repeated file names such as `User.cs`, `Program.cs`, `Settings.cs`, `App.xaml`, or `UserService.cs`.
 
@@ -30,7 +30,7 @@ The extension adds a clean and discreet footer at the bottom of the editor and d
 
 ### Español
 
-**Bardasoft SourcePath** ayuda a identificar rápidamente el archivo exacto que estás editando en Visual Studio.
+**SourcePath** ayuda a identificar rápidamente el archivo exacto que estás editando en Visual Studio.
 
 Es especialmente útil cuando trabajas con soluciones grandes, múltiples proyectos, estructuras profundas de carpetas, archivos generados o nombres de archivo repetidos como `User.cs`, `Program.cs`, `Settings.cs`, `App.xaml` o `UserService.cs`.
 
@@ -69,7 +69,7 @@ La extensión agrega una barra inferior limpia y discreta dentro del editor, don
 ## Preview / Vista previa
 
 <p align="center">
-  <img src="src/Bardasoft.VisualStudio.SourcePath/Resources/marketplace-preview.png" alt="Bardasoft SourcePath preview" />
+  <img src="src/Bardasoft.VisualStudio.SourcePath/Resources/marketplace-preview.png" alt="SourcePath preview" />
 </p>
 
 ---
@@ -77,7 +77,7 @@ La extensión agrega una barra inferior limpia y discreta dentro del editor, don
 ## Usage example / Ejemplo de uso
 
 <p align="center">
-  <img src="src/Bardasoft.VisualStudio.SourcePath/Resources/footer-example.png" alt="Bardasoft SourcePath footer example" />
+  <img src="src/Bardasoft.VisualStudio.SourcePath/Resources/footer-example.png" alt="SourcePath footer example" />
 </p>
 
 ---
@@ -85,10 +85,10 @@ La extensión agrega una barra inferior limpia y discreta dentro del editor, don
 ## Donaciones / Donations
 
 This project is free and open source.
-If **Bardasoft SourcePath** is useful to you, you can support its development with an optional donation.
+If **SourcePath** is useful to you, you can support its development with an optional donation.
 
 Este proyecto es gratuito y de código abierto.  
-Si **Bardasoft SourcePath** te resulta útil, puedes apoyar su desarrollo con una donación voluntaria.  
+Si **SourcePath** te resulta útil, puedes apoyar su desarrollo con una donación voluntaria.
 
 <p align="center">
   <a href="https://www.paypal.com/donate/?hosted_button_id=EM5DZL2RPA8SL" target="_blank">

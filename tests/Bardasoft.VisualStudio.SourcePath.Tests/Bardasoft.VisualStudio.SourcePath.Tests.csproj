@@ -45,11 +45,15 @@
   <ItemGroup>
     <Compile Include="MSTestSettings.cs" />
     <Compile Include="SourcePathPathFormatterTests.cs" />
+    <Compile Include="SourcePathTextTests.cs" />
     <Compile Include="..\..\src\Bardasoft.VisualStudio.SourcePath\SourcePathDisplayMode.cs">
       <Link>TestedSource\SourcePathDisplayMode.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Bardasoft.VisualStudio.SourcePath\SourcePathPathFormatter.cs">
       <Link>TestedSource\SourcePathPathFormatter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Bardasoft.VisualStudio.SourcePath\SourcePathText.cs">
+      <Link>TestedSource\SourcePathText.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>

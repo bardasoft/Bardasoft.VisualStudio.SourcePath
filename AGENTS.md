@@ -32,9 +32,15 @@ AGENTS.md
 Bardasoft.VisualStudio.SourcePath.sln
 Build.bat
 Install.bat
+Publish-Marketplace.ps1
+Publish-Marketplace.bat
 README.md
 LICENSE
 DONATIONS.md
+marketplace\
+  overview.md
+  vs-publish.json
+  images\
 scripts\
   build-vsix.bat
   install-vsix.bat
@@ -59,7 +65,7 @@ tests\
     MSTestSettings.cs
 ```
 
-En el workspace local tambien puede existir una carpeta hermana `..\marketplace\` con material de publicacion. Esa carpeta no forma parte de la raiz GitHub de `bardasoft/Bardasoft.VisualStudio.SourcePath` a menos que se agregue explicitamente.
+El material de publicacion de Visual Studio Marketplace vive dentro de la raiz GitHub en `marketplace\`.
 
 ## Tecnologia y version actual
 
@@ -143,9 +149,15 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\fix-vsix-double-clic
 ```
 
 - `VsixPublisher.exe`
-  - Lo usa `scripts\publish-marketplace.ps1`.
+  - Lo usan `Publish-Marketplace.ps1` y `scripts\publish-marketplace.ps1`.
   - Requiere Visual Studio con VSSDK instalado.
   - Requiere `PersonalAccessToken`; nunca guardar el token en archivos del repo.
+
+- `Publish-Marketplace.ps1`
+  - Script raiz recomendado para actualizar Visual Studio Marketplace.
+  - Compila el VSIX, lee `marketplace\vs-publish.json`, muestra la identidad que se va a publicar y llama a `scripts\publish-marketplace.ps1`.
+  - Puede tomar el token desde `-PersonalAccessToken` o desde `$env:VS_MARKETPLACE_PAT`.
+  - Usar `-DryRun` para validar rutas/metadata sin publicar.
 
 ### Herramientas de exploracion y mantenimiento
 
@@ -294,7 +306,20 @@ src\Bardasoft.VisualStudio.SourcePath\bin\Release\Bardasoft.VisualStudio.SourceP
 Publicar en marketplace solo con autorizacion explicita:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts\publish-marketplace.ps1 -PersonalAccessToken <PAT>
+powershell -NoProfile -ExecutionPolicy Bypass -File Publish-Marketplace.ps1 -PersonalAccessToken <PAT>
+```
+
+Tambien se puede usar variable de entorno para no escribir el token en el comando:
+
+```powershell
+$env:VS_MARKETPLACE_PAT = "<PAT>"
+powershell -NoProfile -ExecutionPolicy Bypass -File Publish-Marketplace.ps1
+```
+
+Validar sin publicar:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File Publish-Marketplace.ps1 -DryRun
 ```
 
 ## Validacion recomendada
@@ -334,20 +359,20 @@ README.md
 src\Bardasoft.VisualStudio.SourcePath\Docs\
 ```
 
-- Marketplace local, si existe en el workspace:
+- Marketplace:
 
 ```text
-..\marketplace\
+marketplace\
 ```
 
 Antes de cambiar descripciones, claims, capturas o version, revisar:
 
 ```text
-..\marketplace\WHERE_TO_EDIT.md
-..\marketplace\CHECKLIST_PUBLICACION.md
-..\marketplace\README_PUBLICACION.md
-..\marketplace\overview.md
-..\marketplace\MARKETPLACE.md
+marketplace\WHERE_TO_EDIT.md
+marketplace\CHECKLIST_PUBLICACION.md
+marketplace\README_PUBLICACION.md
+marketplace\overview.md
+marketplace\MARKETPLACE.md
 ```
 
 ## CodeGraph

@@ -1,3 +1,10 @@
+Version 2.1.2
+- Added localized UI text for tooltips, context menus, options page labels, display mode values and diagnostic messages.
+- Added support for English, Spanish, Italian, Portuguese, French, Russian, Chinese, Hindi, Japanese and German UI text.
+- Added English fallback for unsupported Visual Studio UI languages.
+- Added tests that verify localized text coverage and fallback behavior.
+- Updated README documentation for the new localized UI release.
+
 Version 2.1.0
 - Added the SourcePath options page.
 - Added display modes for full path, file name and solution-relative path.

@@ -1,10 +1,13 @@
 #nullable enable
 
+using System.ComponentModel;
+
 namespace Bardasoft.VisualStudio.SourcePath;
 
 /// <summary>
-/// Define como se muestra la ruta del archivo activo en el footer.
+/// Defines how the active file path is displayed in the footer.
 /// </summary>
+[TypeConverter(typeof(SourcePathDisplayModeConverter))]
 public enum SourcePathDisplayMode
 {
     FullPath = 0,

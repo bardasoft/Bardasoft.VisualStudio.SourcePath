@@ -116,6 +116,7 @@
     <Compile Include="SourcePathOptionsState.cs" />
     <Compile Include="SourcePathPackage.cs" />
     <Compile Include="SourcePathPathFormatter.cs" />
+    <Compile Include="SourcePathText.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -168,17 +169,17 @@
     <VSSDKBuildToolsTargets>$(NuGetPackageRoot)microsoft.vssdk.buildtools\$(VSSDKBuildToolsVersion)\tools\VSSDK\Microsoft.VsSDK.targets</VSSDKBuildToolsTargets>
   </PropertyGroup>
   <Target Name="EnsureVisualStudioEditorReferences" BeforeTargets="CoreCompile">
-    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.text.ui.wpf\17.14.249\lib\net472\Microsoft.VisualStudio.Text.UI.Wpf.dll')" Text="No se encontro Microsoft.VisualStudio.Text.UI.Wpf.dll. Ejecuta Restore o elimina bin/obj y vuelve a compilar." />
-    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.text.data\17.14.249\lib\net472\Microsoft.VisualStudio.Text.Data.dll')" Text="No se encontro Microsoft.VisualStudio.Text.Data.dll. Ejecuta Restore o elimina bin/obj y vuelve a compilar." />
-    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.utilities\17.14.40264\lib\net472\Microsoft.VisualStudio.Utilities.dll')" Text="No se encontro Microsoft.VisualStudio.Utilities.dll. Ejecuta Restore o elimina bin/obj y vuelve a compilar." />
-    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.shell.15.0\17.14.40264\lib\net472\Microsoft.VisualStudio.Shell.15.0.dll')" Text="No se encontro Microsoft.VisualStudio.Shell.15.0.dll. Ejecuta Restore o elimina bin/obj y vuelve a compilar." />
-    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.shell.framework\17.14.40264\lib\net472\Microsoft.VisualStudio.Shell.Framework.dll')" Text="No se encontro Microsoft.VisualStudio.Shell.Framework.dll. Ejecuta Restore o elimina bin/obj y vuelve a compilar." />
-    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.shell.interop\17.14.40260\lib\net472\Microsoft.VisualStudio.Shell.Interop.dll')" Text="No se encontro Microsoft.VisualStudio.Shell.Interop.dll. Ejecuta Restore o verifica la version del paquete." />
-    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.interop\17.14.40260\lib\net472\Microsoft.VisualStudio.Interop.dll')" Text="No se encontro Microsoft.VisualStudio.Interop.dll. Ejecuta Restore o verifica la version del paquete." />
-    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.threading.only\17.14.15\lib\net472\Microsoft.VisualStudio.Threading.dll')" Text="No se encontro Microsoft.VisualStudio.Threading.dll. Ejecuta Restore o verifica la version del paquete." />
+    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.text.ui.wpf\17.14.249\lib\net472\Microsoft.VisualStudio.Text.UI.Wpf.dll')" Text="Microsoft.VisualStudio.Text.UI.Wpf.dll was not found. Run Restore or delete bin/obj and build again." />
+    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.text.data\17.14.249\lib\net472\Microsoft.VisualStudio.Text.Data.dll')" Text="Microsoft.VisualStudio.Text.Data.dll was not found. Run Restore or delete bin/obj and build again." />
+    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.utilities\17.14.40264\lib\net472\Microsoft.VisualStudio.Utilities.dll')" Text="Microsoft.VisualStudio.Utilities.dll was not found. Run Restore or delete bin/obj and build again." />
+    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.shell.15.0\17.14.40264\lib\net472\Microsoft.VisualStudio.Shell.15.0.dll')" Text="Microsoft.VisualStudio.Shell.15.0.dll was not found. Run Restore or delete bin/obj and build again." />
+    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.shell.framework\17.14.40264\lib\net472\Microsoft.VisualStudio.Shell.Framework.dll')" Text="Microsoft.VisualStudio.Shell.Framework.dll was not found. Run Restore or delete bin/obj and build again." />
+    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.shell.interop\17.14.40260\lib\net472\Microsoft.VisualStudio.Shell.Interop.dll')" Text="Microsoft.VisualStudio.Shell.Interop.dll was not found. Run Restore or verify the package version." />
+    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.interop\17.14.40260\lib\net472\Microsoft.VisualStudio.Interop.dll')" Text="Microsoft.VisualStudio.Interop.dll was not found. Run Restore or verify the package version." />
+    <Error Condition="!Exists('$(NuGetPackageRoot)microsoft.visualstudio.threading.only\17.14.15\lib\net472\Microsoft.VisualStudio.Threading.dll')" Text="Microsoft.VisualStudio.Threading.dll was not found. Run Restore or verify the package version." />
   </Target>
   <Target Name="EnsureVSSDKBuildToolsTargets" BeforeTargets="PrepareForBuild">
-    <Error Condition="!Exists('$(VSSDKBuildToolsTargets)')" Text="No se encontraron los targets de Microsoft.VSSDK.BuildTools en: $(VSSDKBuildToolsTargets). Ejecuta Restore o verifica la version del paquete." />
+    <Error Condition="!Exists('$(VSSDKBuildToolsTargets)')" Text="Microsoft.VSSDK.BuildTools targets were not found at: $(VSSDKBuildToolsTargets). Run Restore or verify the package version." />
   </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSSDKBuildToolsTargets)" Condition="Exists('$(VSSDKBuildToolsTargets)')" />

@@ -1,13 +1,9 @@
 # SourcePath
 
-<p align="center">
-  <img src="src/Bardasoft.VisualStudio.SourcePath/Resources/Icon128.png" alt="SourcePath Logo" width="128" height="128" />
-</p>
+![SourcePath Logo](https://raw.githubusercontent.com/bardasoft/Bardasoft.VisualStudio.SourcePath/master/src/Bardasoft.VisualStudio.SourcePath/Resources/Icon128.png)
 
-<p align="center">
-  <strong>Free and open-source extension for Visual Studio.</strong><br/>
-  Shows the full source file path of the active document in a discreet footer at the bottom of the editor.
-</p>
+**Free and open-source extension for Visual Studio.**  
+Shows the full source file path of the active document in a discreet footer at the bottom of the editor.
 
 ---
 
@@ -33,9 +29,6 @@ The extension adds a clean and discreet footer at the bottom of the editor and d
 - Allows opening the file location in Windows Explorer.
 - Includes compact footer action buttons.
 - Includes configurable display options.
-- Localizes tooltips, context menus, options page labels, and diagnostic messages.
-- Supports English, Spanish, Italian, Portuguese, French, Russian, Chinese, Hindi, Japanese, and German UI text.
-- Falls back to English for unsupported Visual Studio UI languages.
 - Supports light and dark Visual Studio themes.
 - Free and open source.
 
@@ -43,17 +36,13 @@ The extension adds a clean and discreet footer at the bottom of the editor and d
 
 ## Preview
 
-<p align="center">
-  <img src="src/Bardasoft.VisualStudio.SourcePath/Resources/marketplace-preview.png" alt="SourcePath preview" />
-</p>
+![SourcePath preview](https://raw.githubusercontent.com/bardasoft/Bardasoft.VisualStudio.SourcePath/master/src/Bardasoft.VisualStudio.SourcePath/Resources/marketplace-preview.png)
 
 ---
 
 ## Usage Example
 
-<p align="center">
-  <img src="src/Bardasoft.VisualStudio.SourcePath/Resources/footer-example.png" alt="SourcePath footer example" />
-</p>
+![SourcePath footer example](https://raw.githubusercontent.com/bardasoft/Bardasoft.VisualStudio.SourcePath/master/src/Bardasoft.VisualStudio.SourcePath/Resources/footer-example.png)
 
 ---
 
@@ -65,7 +54,7 @@ The extension adds a clean and discreet footer at the bottom of the editor and d
 - Added support for English, Spanish, Italian, Portuguese, French, Russian, Chinese, Hindi, Japanese, and German.
 - Added English fallback for unsupported Visual Studio UI languages.
 - Added automated tests for localized text coverage and fallback behavior.
-- Updated the VSIX, assembly, package metadata, changelog, marketplace overview, and README documentation to this version.
+- Updated README documentation for the new localized UI release.
 
 ### Version 2.1.0
 
@@ -95,13 +84,7 @@ The extension adds a clean and discreet footer at the bottom of the editor and d
 This project is free and open source.  
 If **SourcePath** is useful to you, you can support its development with an optional donation.
 
-<p align="center">
-  <a href="https://www.paypal.com/donate/?hosted_button_id=EM5DZL2RPA8SL" target="_blank">
-    <img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"
-         alt="Donate with PayPal"
-         title="Donate with PayPal" />
-  </a>
-</p>
+[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=EM5DZL2RPA8SL)
 
 ---
 
@@ -119,6 +102,6 @@ This extension was created to improve the Visual Studio development experience, 
 
 ## License
 
-This project is distributed under the **MIT License**.  
+This project is distributed under the **MIT License**.
 
-See the [LICENSE](LICENSE) file for more information.
+See the [LICENSE](https://github.com/bardasoft/Bardasoft.VisualStudio.SourcePath/blob/master/LICENSE) file for more information.

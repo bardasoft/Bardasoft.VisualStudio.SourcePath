@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.Utilities;
 namespace Bardasoft.VisualStudio.SourcePath;
 
 /// <summary>
-/// Proveedor MEF que registra un margen inferior dentro del editor de texto de Visual Studio.
+/// MEF provider that registers a bottom margin in the Visual Studio text editor.
 /// </summary>
 [Export(typeof(IWpfTextViewMarginProvider))]
 [Name(SourcePathFooterMargin.MarginName)]
@@ -38,20 +38,20 @@ internal sealed class SourcePathFooterMarginProvider : IWpfTextViewMarginProvide
         if (wpfTextViewHost.TextView is null)
         {
             throw new ArgumentException(
-                "El host del editor no contiene una vista de texto válida.",
+                SourcePathText.Get(SourcePathText.TextViewHostMissing),
                 nameof(wpfTextViewHost));
         }
 
         if (TextDocumentFactoryService is null)
         {
             throw new InvalidOperationException(
-                "No se pudo importar ITextDocumentFactoryService desde MEF.");
+                SourcePathText.Get(SourcePathText.TextDocumentFactoryMissing));
         }
 
         if (ServiceProvider is null)
         {
             throw new InvalidOperationException(
-                "No se pudo importar SVsServiceProvider desde MEF.");
+                SourcePathText.Get(SourcePathText.ServiceProviderMissing));
         }
 
         return new SourcePathFooterMargin(

@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json.schemastore.org/vsix-publish",
+  "categories": [
+    "coding",
+    "tools"
+  ],
+  "identity": {
+    "internalName": "SourcePath"
+  },
+  "overview": "overview.md",
+  "priceCategory": "free",
+  "publisher": "Bardasoft",
+  "private": false,
+  "qna": true,
+  "repo": "https://github.com/Bardasoft/Bardasoft.VisualStudio.SourcePath",
+  "assetFiles": [
+    {
+      "pathOnDisk": "images/marketplace-preview.png",
+      "targetPath": "images/marketplace-preview.png"
+    },
+    {
+      "pathOnDisk": "images/footer-example.png",
+      "targetPath": "images/footer-example.png"
+    },
+    {
+      "pathOnDisk": "images/icon.png",
+      "targetPath": "images/icon.png"
+    },
+    {
+      "pathOnDisk": "images/preview.png",
+      "targetPath": "images/preview.png"
+    }
+  ]
+}

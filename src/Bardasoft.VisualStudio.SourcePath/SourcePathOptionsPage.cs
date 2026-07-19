@@ -7,51 +7,51 @@ namespace Bardasoft.VisualStudio.SourcePath;
 
 public sealed class SourcePathOptionsPage : DialogPage
 {
-    [Category("Apariencia")]
-    [DisplayName("Mostrar footer")]
-    [Description("Muestra u oculta el footer de SourcePath en el editor.")]
+    [SourcePathCategory(SourcePathText.AppearanceCategory)]
+    [SourcePathDisplayName(SourcePathText.ShowFooterName)]
+    [SourcePathDescription(SourcePathText.ShowFooterDescription)]
     [DefaultValue(true)]
     public bool IsFooterVisible { get; set; } = true;
 
-    [Category("Apariencia")]
-    [DisplayName("Tipo de letra")]
-    [Description("Nombre de la familia tipografica usada en el footer.")]
+    [SourcePathCategory(SourcePathText.AppearanceCategory)]
+    [SourcePathDisplayName(SourcePathText.FontFamilyName)]
+    [SourcePathDescription(SourcePathText.FontFamilyDescription)]
     [DefaultValue("Segoe UI")]
     public string FontFamily { get; set; } = "Segoe UI";
 
-    [Category("Apariencia")]
-    [DisplayName("Tamano de letra")]
-    [Description("Tamano de letra del footer. Rango recomendado: 8 a 24.")]
+    [SourcePathCategory(SourcePathText.AppearanceCategory)]
+    [SourcePathDisplayName(SourcePathText.FontSizeName)]
+    [SourcePathDescription(SourcePathText.FontSizeDescription)]
     [DefaultValue(11d)]
     public double FontSize { get; set; } = 11;
 
-    [Category("Apariencia")]
-    [DisplayName("Alto del footer")]
-    [Description("Alto del footer en pixeles. Rango recomendado: 18 a 48.")]
+    [SourcePathCategory(SourcePathText.AppearanceCategory)]
+    [SourcePathDisplayName(SourcePathText.FooterHeightName)]
+    [SourcePathDescription(SourcePathText.FooterHeightDescription)]
     [DefaultValue(24d)]
     public double FooterHeight { get; set; } = 24;
 
-    [Category("Apariencia")]
-    [DisplayName("Padding horizontal")]
-    [Description("Espacio horizontal interno del footer en pixeles.")]
+    [SourcePathCategory(SourcePathText.AppearanceCategory)]
+    [SourcePathDisplayName(SourcePathText.HorizontalPaddingName)]
+    [SourcePathDescription(SourcePathText.HorizontalPaddingDescription)]
     [DefaultValue(8d)]
     public double HorizontalPadding { get; set; } = 8;
 
-    [Category("Ruta")]
-    [DisplayName("Formato de ruta")]
-    [Description("Define si el footer muestra la ruta completa, la ruta relativa a la solucion o solo el nombre del archivo.")]
+    [SourcePathCategory(SourcePathText.PathCategory)]
+    [SourcePathDisplayName(SourcePathText.DisplayModeName)]
+    [SourcePathDescription(SourcePathText.DisplayModeDescription)]
     [DefaultValue(SourcePathDisplayMode.FullPath)]
     public SourcePathDisplayMode DisplayMode { get; set; } = SourcePathDisplayMode.FullPath;
 
-    [Category("Acciones")]
-    [DisplayName("Mostrar botones")]
-    [Description("Muestra botones compactos para copiar ruta, copiar nombre, copiar carpeta y abrir ubicacion.")]
+    [SourcePathCategory(SourcePathText.ActionsCategory)]
+    [SourcePathDisplayName(SourcePathText.ShowActionButtonsName)]
+    [SourcePathDescription(SourcePathText.ShowActionButtonsDescription)]
     [DefaultValue(true)]
     public bool ShowActionButtons { get; set; } = true;
 
-    [Category("Acciones")]
-    [DisplayName("Ctrl+Click abre ubicacion")]
-    [Description("Permite abrir la ubicacion del archivo con Ctrl+Click sobre el footer.")]
+    [SourcePathCategory(SourcePathText.ActionsCategory)]
+    [SourcePathDisplayName(SourcePathText.EnableCtrlClickOpenName)]
+    [SourcePathDescription(SourcePathText.EnableCtrlClickOpenDescription)]
     [DefaultValue(true)]
     public bool EnableCtrlClickOpen { get; set; } = true;
 

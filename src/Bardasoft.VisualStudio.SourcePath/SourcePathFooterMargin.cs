@@ -23,13 +23,11 @@ using WpfPath = System.Windows.Shapes.Path;
 namespace Bardasoft.VisualStudio.SourcePath;
 
 /// <summary>
-/// Margen inferior que muestra la ruta fisica del archivo abierto en el editor.
+/// Bottom margin that shows the active file path in the editor.
 /// </summary>
 internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
 {
     public const string MarginName = "BardasoftSourcePathMargin";
-
-    private const string NoPhysicalPathText = "Archivo sin ruta física en disco";
 
     private readonly IWpfTextView _textView;
     private readonly ITextDocumentFactoryService _textDocumentFactoryService;
@@ -182,22 +180,22 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
         };
 
         panel.Children.Add(CreateIconButton(
-            "Copiar ruta completa",
+            SourcePathText.Get(SourcePathText.CopyFullPath),
             IconGeometry.Copy,
             (_, _) => CopyFullPath()));
 
         panel.Children.Add(CreateIconButton(
-            "Copiar nombre del archivo",
+            SourcePathText.Get(SourcePathText.CopyFileName),
             IconGeometry.File,
             (_, _) => CopyFileName()));
 
         panel.Children.Add(CreateIconButton(
-            "Copiar carpeta",
+            SourcePathText.Get(SourcePathText.CopyFolderPath),
             IconGeometry.Folder,
             (_, _) => CopyFolderPath()));
 
         panel.Children.Add(CreateIconButton(
-            "Abrir ubicacion en el Explorador",
+            SourcePathText.Get(SourcePathText.OpenLocationInExplorer),
             IconGeometry.OpenFolder,
             (_, _) => OpenContainingFolder()));
 
@@ -370,8 +368,9 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
 
         if (string.IsNullOrWhiteSpace(filePath))
         {
-            _pathTextBox.Text = NoPhysicalPathText;
-            _pathTextBox.ToolTip = NoPhysicalPathText;
+            string noPhysicalPathText = SourcePathText.Get(SourcePathText.NoPhysicalPath);
+            _pathTextBox.Text = noPhysicalPathText;
+            _pathTextBox.ToolTip = noPhysicalPathText;
             return;
         }
 
@@ -448,21 +447,21 @@ internal sealed class SourcePathFooterMargin : Border, IWpfTextViewMargin
         var contextMenu = new ContextMenu();
 
         contextMenu.Items.Add(CreateMenuItem(
-            "Copiar ruta completa",
+            SourcePathText.Get(SourcePathText.CopyFullPath),
             (_, _) => CopyFullPath()));
 
         contextMenu.Items.Add(CreateMenuItem(
-            "Copiar nombre del archivo",
+            SourcePathText.Get(SourcePathText.CopyFileName),
             (_, _) => CopyFileName()));
 
         contextMenu.Items.Add(CreateMenuItem(
-            "Copiar carpeta",
+            SourcePathText.Get(SourcePathText.CopyFolderPath),
             (_, _) => CopyFolderPath()));
 
         contextMenu.Items.Add(new Separator());
 
         contextMenu.Items.Add(CreateMenuItem(
-            "Abrir ubicacion en el Explorador",
+            SourcePathText.Get(SourcePathText.OpenLocationInExplorer),
             (_, _) => OpenContainingFolder()));
 
         return contextMenu;

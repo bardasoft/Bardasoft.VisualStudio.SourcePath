@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.Shell;
 namespace Bardasoft.VisualStudio.SourcePath;
 
 [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-[InstalledProductRegistration("SourcePath", "Muestra la ruta del archivo activo en el editor.", "2.1.0")]
+[InstalledProductRegistration("SourcePath", "Shows the active file path in the editor.", "2.1.2")]
 [ProvideOptionPage(typeof(SourcePathOptionsPage), "SourcePath", "General", 0, 0, true)]
 [ProvideAutoLoad(VSConstants.UICONTEXT.ShellInitialized_string, PackageAutoLoadFlags.BackgroundLoad)]
 [Guid(PackageGuidString)]
